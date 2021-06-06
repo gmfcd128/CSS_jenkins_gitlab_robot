@@ -1,0 +1,13 @@
+ulimit -s unlimited
+chmod 777 -R *
+cd ./code/build.linux
+make clean
+make depend
+make
+cd ../test
+make clean
+make 
+rm -f DISK_0
+python3 test_case.py test_case.json
+valgrind --leak-check=full ./FS_HW04_a.sh 
+valgrind --leak-check=full ./FS_HW04_b.sh 

@@ -1,0 +1,10 @@
+*** Settings ***
+Library    SeleniumLibrary
+Library    dctLibrary
+Resource    ../keywords/Variable.txt
+
+*** Keywords ***
+Wait Until Element Is Visible On Page
+    [Arguments]    ${locator}    ${timeout}    ${error}=Element not found in the page within ${timeout}. locator:${locator}
+    Wait Until Page Contains Element    ${locator}    timeout=${timeout}    error=${error}
+    Wait Until Element Is Visible    ${locator}    timeout=${timeout}    error=${error}

@@ -1,0 +1,9 @@
+ulimit -s unlimited
+chmod 777 -R *
+cd ./code/build.linux
+make clean
+make depend
+make
+cd ../test
+make clean
+make

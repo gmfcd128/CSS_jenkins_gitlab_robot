@@ -1,0 +1,73 @@
+*** Settings ***
+Library    SeleniumLibrary
+Library    dctLibrary
+Resource    ../keywords/Variable.txt
+Resource    ../keywords/common.txt
+
+*** Keywords ***
+Open Gitlab Web
+    Open Browser    url=https://css-gitlab.csie.ntut.edu.tw/users/sign_in    browser=chrome
+    Maximize Browser Window
+
+Log In For Gitlab
+    [Arguments]    ${username}    ${password}
+    Input Username For Gitlab Log In    ${username}
+    Input Password For Gitlab Log In    ${password}
+    Click Button    //input[@value='Sign in']
+    Wait Until Element Is Visible On Page    id:logo    timeout=${shortTime}    error=Gitlab logo should be visible.
+
+Input Username For Gitlab Log In
+    [Arguments]    ${username}
+    Wait Until Page Contains Element    id:user_login    timeout=${shortTime}    error=username input should be visible.
+    Wait Until Element Is Visible On Page    id:user_login    timeout=${shortTime}    error=username input should be visible.
+    Wait Until Element Is Visible On Page    id:user_login    timeout=${shortTime}    error=username input should be visible.
+    Input Text    id:user_login    ${username}
+
+Input Password For Gitlab Log In
+    [Arguments]    ${password}
+    Wait Until Element Is Visible On Page    id:user_password    timeout=${shortTime}    error=password input should be visible.
+    Input Text    id:user_password    ${password}
+
+Go To Admin Area Menu
+    Click Element    //*[@title='Admin Area']
+    Wait Until Element Is Visible On Page    //*[@title='Admin Overview']    timeout=${shortTime}    error=Admin Page should be visible.
+
+Go To All Project Page Of Admin Area
+    Click Element    //*[@class='gl-card']//a[normalize-space()='View latest projects']
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'breadcrumbs-list')]//*[normalize-space()='Admin Area']    timeout=${shortTime}    error="Admin Area" title link should be visible.
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'breadcrumbs-list')]//*[normalize-space()='Projects']    timeout=${shortTime}    error="Projects" title link should be visible.
+
+Gitlab::Admin Area::Go To Sidebar Option
+    [Arguments]    ${option}    ${subOption}
+    Wait Until Element Is Visible On Page    //*[@title='Admin Overview']//*[contains(normalize-space(), 'Admin Area')]    timeout=${shortTime}    error="Admin Area" in sidebar should be visible.
+    # Scroll Web Element With Smooth    ${sideBarXpath}    40    0
+    Click Element    //*[contains(@class, 'sidebar-top-level-items')]//*[contains(normalize-space(), '${option}') and ./*[@class='nav-icon-container']]
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'sidebar-top-level-items')]//*[contains(@class, 'active')]//*[contains(normalize-space(), '${option}') and ./*[@class='nav-icon-container']]    timeout=${shortTime}    error="${option}" page should be visible.
+    # Scroll Web Element With Smooth    ${sideBarXpath}    40    0
+    Click Element    //*[@title='${subOption}']
+    Wait Until Element Is Visible On Page    //*[@class='breadcrumbs-sub-title' and contains(normalize-space(), '${subOption}')]    timeout=${shortTime}    error="${subOption}" title link should be visible.
+
+Gitlab::Admin Area::Go To Project Detail Page
+    [Arguments]    ${projectName}
+    Input Text    //*[@id='project-filter-form-field']    ${projectName}
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'project-row no-description')]//*[@class='project-full-name' and contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error="${projectName}" in search result should be visible.
+    Click Element    //*[contains(@class, 'project-row no-description')]//*[@class='project-full-name' and contains(normalize-space(), '${projectName}')]
+    Wait Until Element Is Visible On Page    //*[@class='breadcrumbs-sub-title' and contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error="${projectName}" title link should be visible.
+    Wait Until Element Is Visible On Page    //*[@class='page-title' and contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error=Project title should be visible.
+
+Gitlab::Admin Area::Go To Project Overview
+    [Arguments]    ${projectName}
+    Wait Until Element Is Visible On Page    //*[@class='breadcrumbs-sub-title' and contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error="${projectName}" title link should be visible.
+    Click Element    //*[@class='content-list']//*[./*[contains(normalize-space(), 'Name:')]]//a[contains(normalize-space(), '${projectName}')]
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'breadcrumbs-list')]//a[contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error="${projectName}" title link should be visible.
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'home-panel-title') and ./*[contains(normalize-space(), '${projectName}')]]    timeout=${shortTime}    error="${projectName}" title in project page should be visible.
+
+Gitlab::Project Page::Go To Sidebar Optain
+    [Arguments]    ${projectName}    ${option}    ${subOption}=${EMPTY}
+    Wait Until Element Is Visible On Page    //*[@title='${projectName}']//*[contains(normalize-space(), '${projectName}')]    timeout=${shortTime}    error="${projectName}" context title should be visible.
+    # Scroll Web Element With Smooth    ${sideBarXpath}    40    0
+    Click Element    //*[contains(@class, 'sidebar-top-level-items')]//*[contains(normalize-space(), '${option}') and ./*[@class='nav-icon-container']]
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'sidebar-top-level-items')]//*[contains(@class, 'active')]//*[contains(normalize-space(), '${option}') and ./*[@class='nav-icon-container']]    timeout=${shortTime}    error=${option} page should be visble.
+    # Scroll Web Element With Smooth    ${sideBarXpath}    40    0
+    Run Keyword If    '${subOption}'!='${EMPTY}'    Run Keywords    Click Element    //*[contains(@title, '${subOption}')]
+    ...                                                      AND    Wait Until Element Is Visible On Page    //*[@class='breadcrumbs-sub-title' and contains(normalize-space(), '${subOption}')]    timeout=${shortTime}    error="${subOption}" title link should be visible.

@@ -1,0 +1,6 @@
+*** Variables ***
+${shortTime} =    3s
+${normalTime} =    5s
+${sideBarXpath} =    //*[@class='nav-sidebar-inner-scroll']
+&{jenkinsAdministrator} =    username=109000000    password=qo0hankASDF!
+@{FSS_stendentId} =    106590042    106590046    108AEA005    106590042    106590046    108AEA005    108AEA007    108AEA008    108318165    108599002    109598052    109598061    109598071    109598074    109598085    109598088    109598111    109599006

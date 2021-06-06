@@ -1,0 +1,97 @@
+*** Settings ***
+Library    SeleniumLibrary
+Library    dctLibrary
+Resource    ../keywords/Variable.txt
+Resource    ../keywords/common.txt
+
+*** Keywords ***
+Open Jenkins Web
+    Open Browser    url=https://css-lab.csie.ntut.edu.tw/jenkins/login?from=%2Fjenkins%2F    browser=chrome
+    Maximize Browser Window
+
+Log In For Jenkins
+    [Arguments]    &{account}
+    Input Username For Jenkins Log In    ${account}[username]
+    Input Password For Jenkins Log In    ${account}[password]
+    Click Button    //input[@value='Sign in']
+    Wait Until Element Is Visible    id:jenkins-home-link    timeout=${shortTime}    error=Jenkins home link should be visible.
+
+Input Username For Jenkins Log In
+    [Arguments]    ${username}
+    Wait Until Page Contains Element    name:j_username    timeout=${shortTime}    error=username input should be visible.
+    Wait Until Element Is Visible    name:j_username    timeout=${shortTime}    error=username input should be visible.
+    Wait Until Element Is Enabled    name:j_username    timeout=${shortTime}    error=username input should be visible.
+    Input Text    name:j_username    ${username}
+
+Input Password For Jenkins Log In
+    [Arguments]    ${password}
+    Wait Until Page Contains Element    name:j_password    timeout=${shortTime}    error=password input should be visible.
+    Wait Until Element Is Visible    name:j_password    timeout=${shortTime}    error=password input should be visible.
+    Wait Until Element Is Enabled    name:j_password    timeout=${shortTime}    error=password input should be visible.
+    Input Text    name:j_password    ${password}
+
+Jenkins::Search Box To Search And Access To Job Page
+    [Arguments]    ${jobname}
+    Wait Until Element Is Visible On Page    id:search-box    timeout=${shortTime}    error=Search input should be visible.
+    Input Text    //*[@id='search-box']    ${jobname}
+    Wait Until Element Is Visible On Page    //*[@class='yui-ac-bd']//*[normalize-space()='${jobname}' and @style]    timeout=${shortTime}    error=Search result should be visible.
+    Press Keys    None    ENTER
+    Wait Until Element Is Visible On Page    //*[@class='item']//*[normalize-space()='${jobname}']    timeout=${shortTime}    error=Tab should be visible.
+
+Jenkins::Enter Job Configure
+    Jenkins::Click Left Bar Option    Configure
+    Wait Until Element Is Visible On Page    //*[@class='tabBar config-section-activators']    timeout=${shortTime}    error=TabBar of "Configure" should be visible.
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'bottom-sticker-inner')]//*[@type='button' and normalize-space()='Save']    timeout=${shortTime}    error=Save button of "Configure" should be visible.
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'bottom-sticker-inner')]//*[@type='button' and normalize-space()='Apply']    timeout=${shortTime}    error=Apply button of "Configure" should be visible.
+    
+Jenkins::Click Left Bar Option
+    [Arguments]    ${option}
+    Wait Until Element Is Visible On Page    //*[@id='tasks']//*[contains(@class, 'task-link-wrapper')]//*[@title='${option}']    timeout=${shortTime}    error=Left bar "${shortTime}" should be visible.
+    Click Element    //*[@id='tasks']//*[contains(@class, 'task-link-wrapper')]//*[@title='${option}']
+
+Jenkins::Job Configure::Click Tab
+    [Arguments]    ${option}
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'config-section-activator') and normalize-space()='${option}']    timeout=${shortTime}    error=${option} of "Configure" should be visible.
+    Click Element        //*[contains(@class, 'config-section-activator') and normalize-space()='${option}']
+    Wait Until Element Is Visible On Page    //*[contains(@class, 'config-section-activator') and contains(@class, 'active') and normalize-space()='${option}']    timeout=${shortTime}    error=Active ${option} of "Configure" should be visible.
+    Wait Until Element Is Visible On Page    //*[@class='section-header' and normalize-space()='${option}']    timeout=${shortTime}    error="${option}" header should be visible.
+
+Jenkins::Job Configure::Input Shell Instruction
+    [Arguments]    ${testFile}
+    click element    //*[@descriptorid='hudson.tasks.Shell']//*[@class='CodeMirror']
+    ${txt} =    Read TXT File    ${testFile}
+    Execute javascript
+    ...    _editor = document.querySelectorAll("div.CodeMirror")[0].CodeMirror;
+    ...    _editor.setValue("${txt}");
+
+Click "Save" Button Of Configure
+    [Arguments]    ${jobname}
+    Click Element    //*[contains(@class, 'bottom-sticker-inner')]//*[@type='button' and normalize-space()='Save']
+    Wait Until Element Is Visible On Page    //*[@class='item']//*[normalize-space()='${jobname}']    timeout=${shortTime}    error=Job name of Tab should be visible.
+
+Jenkins::Job Configure::Click "Permission to Copy Artifact" Checkbox
+    ${checkBox} =    Set Variable    //*[contains(@class, 'active')]//*[normalize-space()='Permission to Copy Artifact']/preceding-sibling::*[@type='checkbox']
+    Wait Until Element Is Visible On Page    ${checkBox}    timeout=${shortTime}    error=Check box of "Permission to Copy Artifact" should be visible.
+    Click Element    ${checkBox}
+
+Jenkins::Job Configure::Wait until "Projects to allow copy artifact" Field Is Not Visible
+    ${word} =    Set Variable    //*[contains(@class, 'active')]//*[normalize-space()='Projects to allow copy artifacts']
+    ${field} =    Set Variable     //*[@class='setting-name' and normalize-space()='Projects to allow copy artifacts']/following-sibling::*[@class='setting-main']//*[contains(@class, 'setting-input')]
+    Wait Until Element Is Not Visible    ${word}    timeout=${shortTime}    error="Projects to allow copy artifacts" words should not be visible.
+    Wait Until Element Is Not Visible    ${field}    timeout=${shortTime}    error=Field of "Projects to allow copy artifacts" should not be Visible.
+
+
+Jenkins::Job Configure::Wait until "Projects to allow copy artifact" Field Is Visible
+    ${word} =    Set Variable    //*[contains(@class, 'active')]//*[normalize-space()='Projects to allow copy artifacts']
+    ${field} =    Set Variable     //*[@class='setting-name' and normalize-space()='Projects to allow copy artifacts']/following-sibling::*[@class='setting-main']//*[contains(@class, 'setting-input')]
+    Wait Until Element Is Visible    ${word}    timeout=${shortTime}    error="Projects to allow copy artifacts" words should be visible.
+    Wait Until Element Is Visible    ${field}    timeout=${shortTime}    error=Field of "Projects to allow copy artifacts" should be Visible.
+
+Jenkins::Job Configure::Wait until "Disable this project" Field Is Visible
+    ${word} =    Set Variable    //*[contains(@class, 'active')]//*[normalize-space()='Disable this project']
+    Wait Until Element Is Visible    ${word}    timeout=${shortTime}    error="Disable this project" words should be visible.
+
+Jenkins::Job Configure::Click "Disable this project" Checkbox
+    ${checkBox} =    Set Variable    //*[contains(@class, 'active')]//*[normalize-space()='Disable this project']/preceding-sibling::*[@type='checkbox']
+    Wait Until Element Is Visible On Page    ${checkBox}    timeout=${shortTime}    error=Check box of "Disable this project" should be visible.
+    Click Element    ${checkBox}
