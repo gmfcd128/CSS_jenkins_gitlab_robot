@@ -20,11 +20,4 @@
 		<nature>org.robotframework.ide.eclipse.main.plugin.robotNature</nature>
 		<nature>org.python.pydev.pythonNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>libspecs/BuiltIn.py</name>
-			<type>1</type>
-			<location>C:/Program Files/Python36/lib/site-packages/robot/libraries/BuiltIn.py</location>
-		</link>
-	</linkedResources>
 </projectDescription>
