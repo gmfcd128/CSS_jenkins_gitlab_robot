@@ -40,7 +40,6 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from os import getcwd
 from robot.libraries.OperatingSystem import OperatingSystem
 import xlrd
-from PIL.ImageFilter import SMOOTH
 
 class dctLibrary:
 

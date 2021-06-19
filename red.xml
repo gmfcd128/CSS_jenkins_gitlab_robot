@@ -3,9 +3,8 @@
     <configVersion>2</configVersion>
     <relativeTo>WORKSPACE</relativeTo>
     <referencedLibrary type="PYTHON" name="SeleniumLibrary" path="C:/Program Files/Python36/Lib/site-packages/SeleniumLibrary/__init__.py" dynamic="false"/>
-    <referencedLibrary type="PYTHON" name="dctBrowser" path="Robot_framework/DCT/dctBrowser.py" dynamic="false"/>
-    <referencedLibrary type="PYTHON" name="DebuggingLibrary" path="C:/Program Files/Python36/Lib/site-packages/DebuggingLibrary/__init__.py" dynamic="false"/>
     <referencedLibrary type="PYTHON" name="dctLibrary" path="autoCSSLAB/DCT/dctLibrary.py" dynamic="false"/>
+    <referencedLibrary type="PYTHON" name="DebuggingLibrary" path="C:/Users/JackLin/AppData/Roaming/Python/Python36/site-packages/DebuggingLibrary/DebuggingLibrary.py" dynamic="false"/>
     <pythonpath/>
     <classpath/>
     <excludedForValidation/>
