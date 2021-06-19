@@ -20,7 +20,6 @@ Input Username For Gitlab Log In
     [Arguments]    ${username}
     Wait Until Page Contains Element    id:user_login    timeout=${shortTime}    error=username input should be visible.
     Wait Until Element Is Visible On Page    id:user_login    timeout=${shortTime}    error=username input should be visible.
-    Wait Until Element Is Visible On Page    id:user_login    timeout=${shortTime}    error=username input should be visible.
     Input Text    id:user_login    ${username}
 
 Input Password For Gitlab Log In
