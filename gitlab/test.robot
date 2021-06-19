@@ -2,7 +2,8 @@
 Library    SeleniumLibrary
 Library    dctLibrary
 Suite Setup    Open Browser    https://css-gitlab.csie.ntut.edu.tw/users/sign_in    Chrome
-Suite Teardown    Run Keywords    Log Off    Close Browser
+Suite Teardown    Run Keywords    Log Off    AND
+...                               Close Browser
 
 *** Test Cases ***
 Login
